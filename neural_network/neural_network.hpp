@@ -17,6 +17,7 @@ typedef struct neural_network_def {
 
 s_neural_network start(uint32_t input_size);
 void feed_neural_network(s_neural_network& neural_network);
+void delete_network(s_neural_network* neural_network);
 
 
 

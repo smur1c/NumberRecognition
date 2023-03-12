@@ -39,7 +39,7 @@ void init_network(s_neural_network& neural_network, uint32_t input_size)
         neural_network.activation[a] = new float[neural_network.layer_size[a]];
         for(int b = 0; b < neural_network.layer_size[a]; b++)
         {
-            neural_network.activation[a][b] = random_float();
+            neural_network.activation[a][b] = 0.1f;
         }
     }
     
@@ -74,6 +74,7 @@ void init_network(s_neural_network& neural_network, uint32_t input_size)
     //print_activations(neural_network);
     //print_weights(&neural_network);
     //print_bias(neural_network);
+    //print_outputs(neural_network);
 }
 
 
@@ -95,9 +96,22 @@ void feed_neural_network(s_neural_network& neural_network)
             neural_network.activation[a-1][b] = sigmoid(neural_network.activation[a-1][b] + neural_network.bias[a-1][b]);
         }
     }
-    print_outputs(neural_network);
+    //print_outputs(neural_network);
 }
 
+
+void delete_network(s_neural_network* neural_network)
+{
+    neural_network->layer_size = nullptr;
+    delete [] neural_network->layer_size;
+    neural_network->weights = nullptr;
+    delete [] neural_network->weights;
+    neural_network->activation = nullptr;
+    delete [] neural_network->activation;
+    neural_network->bias = nullptr;
+    delete [] neural_network->bias;
+    neural_network = nullptr;
+}
 
 float sigmoid(float x)
 {

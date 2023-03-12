@@ -11,6 +11,5 @@
 int main(int argc, const char * argv[]) {
     s_neural_network neural_network = start(28*28);
     feed_neural_network(neural_network);
-
     return 0;
 }
