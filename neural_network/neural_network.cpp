@@ -5,6 +5,7 @@
 //  Created by Sebastian on 09.03.23.
 //
 #include <iostream>
+#include <math.h>
 #include "neural_network.hpp"
 
 void init_network(s_neural_network& neural_network, uint32_t input_size);
@@ -14,6 +15,7 @@ void print_bias(s_neural_network neural_network);
 float sigmoid(float x);
 float random_float();
 void print_outputs(s_neural_network neural_network);
+
 
 s_neural_network start(uint32_t input_size)
 {
@@ -39,7 +41,7 @@ void init_network(s_neural_network& neural_network, uint32_t input_size)
         neural_network.activation[a] = new float[neural_network.layer_size[a]];
         for(int b = 0; b < neural_network.layer_size[a]; b++)
         {
-            neural_network.activation[a][b] = 0.1f;
+            neural_network.activation[a][b] = 0.1;
         }
     }
     
@@ -79,7 +81,7 @@ void init_network(s_neural_network& neural_network, uint32_t input_size)
 
 
 float random_float() {
-    return static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/1));
+    return static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/5));
 }
 
 void feed_neural_network(s_neural_network& neural_network)
@@ -91,12 +93,12 @@ void feed_neural_network(s_neural_network& neural_network)
         {
             for(int c = 0; c < neural_network.layer_size[a-1]; c++)
             {
-                neural_network.activation[a][b] = neural_network.activation[a-1][b] * neural_network.weights[a-1][b][c];
+                neural_network.activation[a][b] += neural_network.activation[a-1][b] * neural_network.weights[a-1][b][c];
             }
-            neural_network.activation[a-1][b] = sigmoid(neural_network.activation[a-1][b] + neural_network.bias[a-1][b]);
+            neural_network.activation[a][b] = sigmoid(neural_network.activation[a-1][b] + neural_network.bias[a-1][b]);
         }
     }
-    //print_outputs(neural_network);
+    print_outputs(neural_network); 
 }
 
 
@@ -115,7 +117,7 @@ void delete_network(s_neural_network* neural_network)
 
 float sigmoid(float x)
 {
-    return x / (1 + abs(x));
+    return 1 / (1 + exp(-x));
 }
 
 
