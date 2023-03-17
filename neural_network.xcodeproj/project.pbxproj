@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9E453DEC29C2F81C0056090A /* training_data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E453DEA29C2F81C0056090A /* training_data.cpp */; };
 		9E5DE19929BA2FC9003F4B30 /* neural_network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E5DE19729BA2FC9003F4B30 /* neural_network.cpp */; };
 		9E89439029BA1FDA00FD5963 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9E89438F29BA1FDA00FD5963 /* main.cpp */; };
 /* End PBXBuildFile section */
@@ -24,6 +25,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9E453DEA29C2F81C0056090A /* training_data.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = training_data.cpp; sourceTree = "<group>"; };
+		9E453DEB29C2F81C0056090A /* training_data.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = training_data.hpp; sourceTree = "<group>"; };
 		9E5DE19729BA2FC9003F4B30 /* neural_network.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = neural_network.cpp; sourceTree = "<group>"; };
 		9E5DE19829BA2FC9003F4B30 /* neural_network.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = neural_network.hpp; sourceTree = "<group>"; };
 		9E89438C29BA1FDA00FD5963 /* neural_network */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = neural_network; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,6 +66,8 @@
 				9E89438F29BA1FDA00FD5963 /* main.cpp */,
 				9E5DE19729BA2FC9003F4B30 /* neural_network.cpp */,
 				9E5DE19829BA2FC9003F4B30 /* neural_network.hpp */,
+				9E453DEA29C2F81C0056090A /* training_data.cpp */,
+				9E453DEB29C2F81C0056090A /* training_data.hpp */,
 			);
 			path = neural_network;
 			sourceTree = "<group>";
@@ -125,6 +130,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E89439029BA1FDA00FD5963 /* main.cpp in Sources */,
+				9E453DEC29C2F81C0056090A /* training_data.cpp in Sources */,
 				9E5DE19929BA2FC9003F4B30 /* neural_network.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

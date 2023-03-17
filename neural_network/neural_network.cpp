@@ -7,14 +7,14 @@
 #include <iostream>
 #include <math.h>
 #include "neural_network.hpp"
+#include "training_data.hpp"
+#include <random>
 
 void init_network(s_neural_network& neural_network, uint32_t input_size);
-void print_activations(s_neural_network neural_network);
-void print_weights(s_neural_network* neural_network);
-void print_bias(s_neural_network neural_network);
 float sigmoid(float x);
 float random_float();
-void print_outputs(s_neural_network neural_network);
+float calculate_cost(s_neural_network& neural_network, digit_image_t training_data);
+
 
 
 s_neural_network start(uint32_t input_size)
@@ -24,6 +24,7 @@ s_neural_network start(uint32_t input_size)
     printf("Start Called \n");
     return *neural_network;
 }
+
 
 
 void init_network(s_neural_network& neural_network, uint32_t input_size)
@@ -41,7 +42,7 @@ void init_network(s_neural_network& neural_network, uint32_t input_size)
         neural_network.activation[a] = new float[neural_network.layer_size[a]];
         for(int b = 0; b < neural_network.layer_size[a]; b++)
         {
-            neural_network.activation[a][b] = 0.1;
+            neural_network.activation[a][b] = 0.0;
         }
     }
     
@@ -57,7 +58,21 @@ void init_network(s_neural_network& neural_network, uint32_t input_size)
             neural_network.weights[a-1][b] = new float[neural_network.layer_size[a-1]];
             for(int c = 0; c < neural_network.layer_size[a-1]; c++)
             {
-                neural_network.weights[a-1][b][c] = random_float(); // Setting weight to 0.0f
+                neural_network.weights[a-1][b][c] = random_float(); // Setting random weight
+            }
+        }
+    }
+    
+    neural_network.changed_weights = new int**[3];
+    for(int a = 1; a <= 3; a++)
+    {
+        neural_network.changed_weights[a-1] = new int*[neural_network.layer_size[a]]; 
+        for(int b = 0; b < neural_network.layer_size[a]; b++)
+        {
+            neural_network.changed_weights[a-1][b] = new int[neural_network.layer_size[a-1]];
+            for(int c = 0; c < neural_network.layer_size[a-1]; c++)
+            {
+                neural_network.changed_weights[a-1][b][c] = 0;
             }
         }
     }
@@ -71,22 +86,24 @@ void init_network(s_neural_network& neural_network, uint32_t input_size)
             neural_network.bias[a-1][b] = random_float();
         }
     }
-    
-    
-    //print_activations(neural_network);
-    //print_weights(&neural_network);
-    //print_bias(neural_network);
-    //print_outputs(neural_network);
 }
 
 
 float random_float() {
-    return static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/5));
+    // Seed the random engine with a random device
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    // Create a uniform distribution for the range [-1, 1]
+    std::uniform_real_distribution<float> dist(-1.f, 1.f);
+
+    // Generate a random number within the given range
+    return dist(gen);
 }
+
 
 void feed_neural_network(s_neural_network& neural_network)
 {
-    
     for(int a = 1; a <= 3; a++)
     {
         for(int b = 0; b < neural_network.layer_size[a]; b++)
@@ -98,9 +115,38 @@ void feed_neural_network(s_neural_network& neural_network)
             neural_network.activation[a][b] = sigmoid(neural_network.activation[a-1][b] + neural_network.bias[a-1][b]);
         }
     }
-    print_outputs(neural_network); 
 }
 
+
+void train_network(s_neural_network& neural_network, digit_image_collection_t& training_data)
+{
+    for(int a = 0; a < training_data.size() - 59900; a++)
+    {
+        for(int b = 0; b < IMAGE_SIZE_Y; b++)
+        {
+            for(int c = 0; c < IMAGE_SIZE_X; c++)
+            {
+                neural_network.activation[0][b*IMAGE_SIZE_X+c] = training_data.at(a).matrix[b][c];
+            }
+        }
+        feed_neural_network(neural_network);
+        neural_network.avg_cost += calculate_cost(neural_network, training_data.at(a));
+    }
+    neural_network.avg_cost = neural_network.avg_cost / 100;
+}
+
+
+float calculate_cost(s_neural_network& neural_network, digit_image_t training_data)
+{
+    float expected_cost[] = {0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f,0.f};
+    expected_cost[training_data.label.c_str()[0] - '0'] = 1.0f;
+    float cost = 0.f;
+    for(int a = 0; a < neural_network.layer_size[3]; a++)
+    {
+        cost += (neural_network.activation[3][a] - expected_cost[a]) * (neural_network.activation[3][a] - expected_cost[a]);
+    }
+    return cost;
+}
 
 void delete_network(s_neural_network* neural_network)
 {
@@ -172,5 +218,8 @@ void print_outputs(s_neural_network neural_network)
     }
 }
 
-
+float calculate_cost(s_neural_network* neural_network)
+{
+    return 0.0f;
+}
 
